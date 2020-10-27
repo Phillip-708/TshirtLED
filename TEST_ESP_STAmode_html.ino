@@ -1,14 +1,13 @@
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-#include <ESP8266WebServer.h>
+#include <WiFi.h>
+#include <WebServer.h>
 
  //ステーションモード設定
-#define SSID "rs500m-da7780-1"
-#define PASSWORD "748bbbb6eedf2" 
+#define SSID "led_wifi"
+#define PASSWORD "00000000" 
 const char *ssid = SSID;
 const char *password = PASSWORD;
 
-ESP8266WebServer server(80);
+WebServer server(80);
 
 void handleRoot() {
   server.send(200, "text/html", "<h1>Hello World</h1>");  
@@ -17,11 +16,13 @@ void handleRoot() {
 
 void handleLEDon() {
 //  digitalWrite(?NUM?, HIGH);
+  Serial.println("LED ON");
   server.send(200, "text/html", "LED ON");  
 }
 
 void handleLEDoff() {
 //  digitalWrite(?NUM?, LOW);
+  Serial.println("LED OFF");
   server.send(200, "text/html", "LED OFF");  
 }
 
