@@ -44,7 +44,7 @@ if (bfType_str!="BM") or \
   sys.exit()
 
 ### 画像サイズ確認(デバッグ用) ###
-print ("(Width,Height)=(%d,%d)" % (bcWidth_int,bcHeight_int))
+# print ("(Width,Height)=(%d,%d)" % (bcWidth_int,bcHeight_int))
 
 if (bcWidth_int != 16 or bcHeight_int != 16):
   print ("### This file size is wrong! Please prepare a 16x16 image ###")
@@ -62,19 +62,20 @@ output = []
 
 ### 画像データ処理開始 ###
 for y in range(bcHeight_int):
-  if y % 2 == 0:
-    xr = reversed(range(bcWidth_int))
-  else:
-    xr = range(bcWidth_int)
-  for x in xr:
-    R = int.from_bytes(f.read(1), "little")
-    G = int.from_bytes(f.read(1), "little")
+  line = []
+  for x in range(bcWidth_int):
     B = int.from_bytes(f.read(1), "little")
+    G = int.from_bytes(f.read(1), "little")
+    R = int.from_bytes(f.read(1), "little")
     ### 画像処理 ###
     R = min(int(R), 255)
     G = min(int(G), 255)
     B = min(int(B), 255)
-    output.append([R, G, B])
+    line.append([R, G, B])
+  if y % 2 == 0:
+    output.extend(list(reversed(line)))
+  else:
+    output.extend(line)
 
 print(output)    
         
