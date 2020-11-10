@@ -1,9 +1,15 @@
 import sys
 
+if len(sys.argv) != 2:
+  print ("Please specify your file path")
+  sys.exit()
+
+filepath = sys.argv[1]
+
 # ref: https://note.nkmk.me/python-print-basic/
 
 ### 入出力画像ファイルのオブジェクトを生成 ###
-f  = open(r"/home/gpioblink/myjobs/naoya/TshirtLED/bit_maker/pien.bmp","rb")
+f  = open(filepath,"rb")
 
 ### BMPファイルヘッダ ###
 bfType         = f.read(2)
@@ -68,16 +74,21 @@ for y in range(bcHeight_int):
     G = int.from_bytes(f.read(1), "little")
     R = int.from_bytes(f.read(1), "little")
     ### 画像処理 ###
-    R = min(int(R), 255)
-    G = min(int(G), 255)
-    B = min(int(B), 255)
+    R = min(int(R/8), 32)
+    G = min(int(G/8), 32)
+    B = min(int(B/8), 32)
     line.append([R, G, B])
-  if y % 2 == 0:
+  if y % 2 == 1:
     output.extend(list(reversed(line)))
   else:
     output.extend(line)
 
-print(output)    
+print("{", end="")
+for i in range(len(output)):
+  print("{%d,%d,%d}" % (output[i][0], output[i][1], output[i][2]), end="")
+  if(i != len(output)-1):
+    print(",", end="")
+print("}")   
         
 ### ファイルオブジェクトをclose ### 
 f.close()
